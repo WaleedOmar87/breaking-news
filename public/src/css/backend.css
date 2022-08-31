@@ -1,0 +1,14 @@
+.active-post {
+	padding: 1em;
+	display: block;
+	float: left;
+	background-color: #fff;
+}
+.active-post h3  , .active-post h4{
+	margin: 0px;
+}
+.active-post .content {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+}

@@ -1,0 +1,80 @@
+/*
+	* Breaking news section styles
+*/
+.bn_frontend {
+	width: 100%;
+	position: fixed;
+	z-index: 9999999;
+	left: 0;
+	max-height: 300px;
+	transition: all 500ms;
+}
+.bn_frontend.hide {
+	visibility: hidden;
+	z-index: -9999999;
+}
+.bn_frontend.hide.top {
+	top: -100vh;
+}
+.bn_frontend.hide.bottom {
+	bottom: -100vh;
+}
+.bn_frontend .post-container {
+	padding: 1em 0 1em 1em;
+	background-color: var(--bn-background-color);
+	position: relative;
+	display: flex;
+	gap: 0.5em;
+	flex-direction: row;
+	justify-content: left;
+	align-items: center;
+}
+.bn_frontend .post-container span.close {
+	position: absolute;
+	top: 1m;
+	display: block;
+	cursor: pointer;
+	right: 1em;
+}
+.bn_frontend .post-container span.close svg {
+	fill: #fff;
+}
+.bn_frontend .post-container h4 {
+	font-size: 1em;
+}
+.bn_frontend .post-container .post a,
+.bn_frontend .post-container h4 {
+	color: var(--bn-text-color);
+	margin: 0;
+	line-height: 1em;
+}
+.bn_frontend.top {
+	top: 0;
+	bottom: auto;
+}
+.bn_frontend.bottom {
+	bottom: 0;
+	top: auto;
+}
+.bn_frontend .post-container .post {
+	margin: 0px;
+	padding: 0px;
+}
+.bn_frontend .post-container .post a {
+	font-size: 1.1em;
+}
+
+/* Mobile Adjustments */
+@media all and (max-width: 640px) {
+	.bn_frontend .post-container {
+		align-items: flex-start;
+		padding: 1em;
+		flex-direction: column;
+	}
+	.bn_frontend .post-container h4 {
+		font-size: 1em;
+	}
+	.bn_frontend .post-container a {
+		font-size: 0.9em;
+	}
+}
