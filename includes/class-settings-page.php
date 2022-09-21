@@ -163,7 +163,7 @@ class BN_Settings_Page
 					foreach ($this->settings_fields  as $setting) :
 						// Define current settings id, field type, HTML class and default color
 						$setting_id = $this->settings_prefix . '_' . $setting['id'];
-						$setting_class = $setting['type'] == 'color_picker' ? 'color-picker' : 'regular-text';
+						$setting_class = $setting['type'] === 'color_picker' ? 'color-picker' : 'regular-text';
 						$setting_default_color = isset($setting['default_color']) ? wp_sprintf('data-default-color="%1$s" ', $setting['default_color']) : '';
 					?>
 						<tr>
@@ -174,7 +174,7 @@ class BN_Settings_Page
 								<?php if ($setting['type'] == 'select') :  ?>
 									<select name="<?php echo esc_attr($setting_id); ?>" id="<?php echo esc_attr($setting_id); ?>">
 										<?php foreach ($setting['choices'] as $choice_id => $choice_name) : ?>
-											<option <?php echo get_option($setting_id) == $choice_id ? 'selected' : ''; ?> value="<?php echo esc_attr($choice_id); ?>"><?php echo $choice_name; ?></option>
+											<option <?php echo get_option($setting_id) === $choice_id ? 'selected' : ''; ?> value="<?php echo esc_attr($choice_id); ?>"><?php echo $choice_name; ?></option>
 										<?php endforeach; ?>
 									</select>
 									<p class="description"><?php echo $setting['description']; ?></p>
@@ -209,7 +209,7 @@ class BN_Settings_Page
 	{
 		// Get featured post id
 		$current_active_post = intval(get_option($this->option_id));
-		if ('' === $current_active_post || false == $current_active_post) return;
+		if ('' === $current_active_post || false === $current_active_post) return;
 	?>
 		<div class="active-post">
 			<div class="content">

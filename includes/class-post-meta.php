@@ -58,7 +58,7 @@ class BN_Post_Metabox
 	{
 		// Current current featured post and check if it's the same post we're in
 		$current_post_meta = get_option(self::$option_id);
-		$checked = $current_post_meta == get_the_ID() ? 'checked' : '';
+		$checked = $current_post_meta === get_the_ID() ? 'checked' : '';
 ?>
 		<p>
 			<label class="component-label" for="<?php echo esc_attr(self::$field_id); ?>">
