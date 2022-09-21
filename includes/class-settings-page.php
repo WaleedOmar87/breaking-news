@@ -196,7 +196,7 @@ class BN_Settings_Page
 			</table>
 			<?php submit_button(); ?>
 		</form>
-		<?php
+	<?php
 
 	}
 
@@ -209,15 +209,14 @@ class BN_Settings_Page
 	{
 		// Get featured post id
 		$current_active_post = intval(get_option($this->option_id));
-		if ($current_active_post !== '') :
-		?>
-			<div class="active-post">
-				<div class="content">
-					<h4><?php echo get_the_title($current_active_post); ?></h4>
-					<a target="_blank" class="button button-secondary" href="<?php echo esc_url(get_edit_post_link($current_active_post)); ?>"><?php echo esc_html__('Edit', 'breaking-news'); ?></a>
-				</div>
+		if ('' === $current_active_post || false == $current_active_post) return;
+	?>
+		<div class="active-post">
+			<div class="content">
+				<h4><?php echo get_the_title($current_active_post); ?></h4>
+				<a target="_blank" class="button button-secondary" href="<?php echo esc_url(get_edit_post_link($current_active_post)); ?>"><?php echo esc_html__('Edit', 'breaking-news'); ?></a>
 			</div>
+		</div>
 <?php
-		endif;
 	}
 }

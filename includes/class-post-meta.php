@@ -33,7 +33,6 @@ class BN_Post_Metabox
 
 		add_action('add_meta_boxes', [__CLASS__, 'add_metaboxes']);
 		add_action('save_post', [__CLASS__, 'save_post'], 10, 2);
-		add_action('enqueue_block_editor_assets', [__CLASS__, 'enqueue_editor_scripts']);
 	}
 
 
@@ -92,13 +91,5 @@ class BN_Post_Metabox
 		} else {
 			update_option(self::$option_id, '');
 		}
-	}
-
-	/**
-	 * Enqueue Editor Scripts
-	 */
-	public static function enqueue_editor_scripts()
-	{
-		// wp_enqueue_script(self::$container_id, BN_PATH . '/build/index.js');
 	}
 }

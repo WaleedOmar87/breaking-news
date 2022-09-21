@@ -107,16 +107,12 @@ class BN_Frontend
 	 */
 	private function get_featured_post_data()
 	{
-		// Get database prefix
-		global $wpdb;
-		$table_prefix = $wpdb->prefix . 'postmeta';
-
 		// Store featured post data
 		$featured_post_data = [];
 
 		// Get the rows that has active post meta from postmeta table
 		$active_post_id = intval(get_option($this->option_id));
-		if ($active_post_id !== '') {
+		if ('' !== $active_post_id) {
 			$featured_post_data['url'] = get_permalink($active_post_id);
 			$featured_post_data['title'] = get_the_title($active_post_id);
 		}
