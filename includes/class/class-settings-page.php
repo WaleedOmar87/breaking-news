@@ -6,23 +6,31 @@
  * @since 1.0
  * @package breaking-news
  */
+
+/**
+ * Import Config Trait
+ */
+require_once BN_DIR . '/includes/trait/trait-config.php';
+
 class BN_Settings_Page
 {
+	// Use Config
+	use BN_Config;
+
+	// Class instance
+	private $instance = null;
 
 	/**
-	 * Settings prefix
+	 * Get instance
+	 * check if class instance already exists and return a new instance if not
 	 */
-	private $settings_prefix = 'bn';
-
-	/**
-	 * Page slug
-	 */
-	private $page_slug = 'bn-settings';
-
-	/**
-	 * Featured post option id
-	 */
-	private $option_id = 'bn_current_active_post';
+	public function getInstance()
+	{
+		if (null === $this->instance) {
+			$this->instance = new BN_Settings_Page();
+		}
+		return $this->instance;
+	}
 
 	/**
 	 * Init
@@ -31,7 +39,7 @@ class BN_Settings_Page
 	 * if there's no $settings_fields passed a default list of fields will be registered
 	 * @since 1.0
 	 */
-	public function __construct($settings_fields = false)
+	public function init($settings_fields = false)
 	{
 		if (!$settings_fields) {
 			$this->settings_fields = [
@@ -93,7 +101,7 @@ class BN_Settings_Page
 				esc_html__('Breaking News Settings', 'breaking_news'),
 				esc_html__('Breaking News Settings', 'breaking_news'),
 				'edit_theme_options',
-				$this->settings_prefix . '_settings',
+				$this->db_prefix . '_settings',
 				[$this, 'display_settings_page']
 			);
 
@@ -106,10 +114,10 @@ class BN_Settings_Page
 			 * Load backend assets
 			 */
 			add_action('admin_print_styles-' . $menu, function () {
-				wp_enqueue_style($this->settings_prefix . '_style', BN_PATH . '/public/src/css/backend.css');
+				wp_enqueue_style($this->db_prefix . '_style', BN_PATH . '/public/src/css/backend.css');
 			});
 			add_action('admin_print_scripts-' . $menu, function () {
-				$script_id = $this->settings_prefix . '_script';
+				$script_id = $this->db_prefix . '_script';
 				wp_register_script($script_id, BN_PATH . '/public/src/javascript/backend.js', ['wp-color-picker']);
 				wp_enqueue_script($script_id);
 				wp_enqueue_style('wp-color-picker');
@@ -127,8 +135,8 @@ class BN_Settings_Page
 		add_action('admin_init', function () {
 			foreach ($this->settings_fields as $setting) {
 				register_setting(
-					$this->settings_prefix . '_plugin_options',
-					$this->settings_prefix . '_' . $setting['id'],
+					$this->db_prefix . '_plugin_options',
+					$this->db_prefix . '_' . $setting['id'],
 					[$this, 'validate_input']
 				);
 			}
@@ -155,14 +163,14 @@ class BN_Settings_Page
 ?>
 		<h1 style="font-weight: normal;"><?php echo esc_html__('Breaking News Settings', 'breaking-news'); ?></h1>
 		<form method="post" action="options.php">
-			<?php settings_fields($this->settings_prefix . '_plugin_options'); ?>
-			<?php do_settings_sections($this->settings_prefix . '_plugin_options'); ?>
+			<?php settings_fields($this->db_prefix . '_plugin_options'); ?>
+			<?php do_settings_sections($this->db_prefix . '_plugin_options'); ?>
 			<table class="form-table">
 				<tbody>
 					<?php
 					foreach ($this->settings_fields  as $setting) :
 						// Define current settings id, field type, HTML class and default color
-						$setting_id = $this->settings_prefix . '_' . $setting['id'];
+						$setting_id = $this->db_prefix . '_' . $setting['id'];
 						$setting_class = $setting['type'] === 'color_picker' ? 'color-picker' : 'regular-text';
 						$setting_default_color = isset($setting['default_color']) ? wp_sprintf('data-default-color="%1$s" ', $setting['default_color']) : '';
 					?>

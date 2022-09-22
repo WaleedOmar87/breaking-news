@@ -29,24 +29,33 @@ add_action('init', function () {
 });
 
 /**
- * Require Database and Entires Class
- */
-require_once BN_DIR . '/includes/class-settings-page.php';
-
-/**
  * Require Dashboard Class and Post Meta Class
  */
-require_once BN_DIR . '/includes/class-settings-page.php';
-require_once BN_DIR . '/includes/class-post-meta.php';
-require_once BN_DIR . '/includes/class-frontend.php';
+require_once BN_DIR . '/includes/class/class-settings-page.php';
+require_once BN_DIR . '/includes/class/class-post-meta.php';
+require_once BN_DIR . '/includes/class/class-frontend.php';
 
 /**
- * Init Plugin
+ * Register And Load Settings Page
  */
-if (class_exists('BN_Settings_Page') && class_exists('BN_Post_Metabox')) {
-	add_action('plugins_loaded', function () {
-		$init_dashboard = new BN_Settings_Page();
-		$init_metaboxes = BN_Post_Metabox::init();
-		$init_frontend = new BN_Frontend();
-	});
+if (class_exists('BN_Settings_Page')) {
+	$get_dashboard = new BN_Settings_Page();
+	$dashboard = $get_dashboard->getInstance();
+	$init_settings_page = $dashboard->init();
+}
+/**
+ * Register and load metaboxes
+ */
+if (class_exists('BN_Post_Metabox')) {
+	$get_metaboxes = new BN_Post_Metabox();
+	$metaboxes = $get_metaboxes->getInstance();
+	$init_metaboxes = $metaboxes->init();
+}
+/**
+ * Register and load front-end
+ */
+if (class_exists('BN_Frontend')) {
+	$get_frontend = new BN_Frontend();
+	$frontend_class = $get_frontend->getInstance();
+	$init_frontend = $frontend_class->init();
 }

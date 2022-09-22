@@ -6,27 +6,39 @@
  * @since 1.0
  * @package breaking-news
  */
+
+/**
+ * Import Config Trait
+ */
+require_once BN_DIR . '/includes/trait/trait-config.php';
+
 class BN_Frontend
 {
+	// Use Config
+	use BN_Config;
+
+	// Class Instance
+	private $instance = null;
+
 	/**
-	 * Prefix and Metakey
+	 * Get instance
+	 * check if class instance already exists and return a new instance if not
 	 */
-	private $prefix;
-	private $metakey;
-	private $settings_prefix;
-	private $option_id;
+	public function getInstance()
+	{
+		if (null === $this->instance) {
+			$this->instance = new BN_Frontend();
+		}
+		return $this->instance;
+	}
 
 	/**
 	 * Constructor
 	 * update prefix and meta key, and init register front-end assets and HTML
 	 * @since 1.0
 	 */
-	public function __construct()
+	public function init()
 	{
-		$this->prefix = 'bn_frontend';
-		$this->metakey = '_featured';
-		$this->settings_prefix = 'bn';
-		$this->option_id = 'bn_current_active_post';
 
 		$this->register_frontend_assets();
 		$this->register_frontend_html();
@@ -42,14 +54,14 @@ class BN_Frontend
 		add_action('wp_enqueue_scripts', function () {
 
 			// Get section style settings and print them as css variables
-			$section_background_color = get_option($this->settings_prefix . '_section_background_color');
-			$section_text_color = get_option($this->settings_prefix . '_section_text_color');
+			$section_background_color = get_option($this->db_prefix . '_section_background_color');
+			$section_text_color = get_option($this->db_prefix . '_section_text_color');
 
 			// Register front-end CSS
-			wp_register_style($this->prefix . '_style', BN_PATH . '/public/src/css/frontend.css');
+			wp_register_style($this->assets_prefix . '_style', BN_PATH . '/public/src/css/frontend.css');
 			// Add inline css
 			wp_add_inline_style(
-				$this->prefix . '_style',
+				$this->assets_prefix . '_style',
 				wp_sprintf(
 					':root { --bn-background-color: %1$s; --bn-text-color:%2$s; }',
 					esc_attr($section_background_color),
@@ -58,8 +70,8 @@ class BN_Frontend
 			);
 
 			// Enqueue front-end assets
-			wp_enqueue_style($this->prefix . '_style');
-			wp_enqueue_script($this->prefix . '_script', BN_PATH . '/public/src/javascript/frontend.js');
+			wp_enqueue_style($this->assets_prefix . '_style');
+			wp_enqueue_script($this->assets_prefix . '_script', BN_PATH . '/public/src/javascript/frontend.js');
 		});
 	}
 
@@ -77,13 +89,13 @@ class BN_Frontend
 			$post_data = $this->get_featured_post_data();
 
 			// Get breaking news section settings
-			$section_title = get_option($this->settings_prefix . '_section_title');
-			$section_position = get_option($this->settings_prefix . '_section_position', 'top');
+			$section_title = get_option($this->db_prefix . '_section_title');
+			$section_position = get_option($this->db_prefix . '_section_position', 'top');
 
 			// Get featured post data
 			if (!empty($post_data)) :
 ?>
-				<div id="<?php echo esc_attr($this->prefix); ?>" class="<?php echo wp_sprintf('%1$s %2$s', esc_attr($this->prefix), esc_attr($section_position)); ?>">
+				<div id="<?php echo esc_attr($this->assets_prefix); ?>" class="<?php echo wp_sprintf('%1$s %2$s', esc_attr($this->assets_prefix), esc_attr($section_position)); ?>">
 					<div class="post-container">
 						<h4 class="featured-section-title"><?php echo esc_html($section_title); ?></h4>
 						<div class="post">
